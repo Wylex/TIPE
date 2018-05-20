@@ -1,6 +1,7 @@
 \documentclass[10pt]{beamer}
 
 \usepackage{graphicx}
+\usepackage{amsmath}
 \graphicspath{ {images/} }
 
 \usetheme[progressbar=frametitle]{metropolis}
@@ -14,6 +15,8 @@
 
 \usepackage{xspace}
 \newcommand{\themename}{\textbf{\textsc{metropolis}}\xspace}
+
+\pgfplotsset{soldot/.style={color=red,only marks,mark=*}} \pgfplotsset{holdot/.style={color=red,fill=white,only marks,mark=*}}
 
 \title{R\'eseau de neurones artificiels}
 \subtitle{Reconnaissance de caract\`eres}
@@ -242,41 +245,30 @@
 		no marks,
         mlineplot,
         width=0.9\textwidth,
-        height=6cm,
-		title={Fonction sigmo\"idale},
-      ]
+        height=5.5cm,
+		xlabel={x},
+		ylabel={f(x)},
+		title={Fonction sigmo\"ide et \'echelon},
+		legend style={at={(0.45,0.8)}}
+		]
 
 		\addplot+ {1/(1 + e^(-x))};
 		\addplot[domain=-5:0,red] {0};
-		\addplot[domain=0:5,red] {0.8};
-		\draw[red] (axis cs:0,0) -- (axis cs:0,0.8);
+		\addplot[domain=0:5,red] {1};
+		\draw[dotted,red] (axis cs:0,0) -- (axis cs:0,1);
+		\addplot[soldot] coordinates{(0,0)};
+		\addplot[holdot] coordinates{(0,1)};
+
+      \legend{$x \mapsto \frac{1}{1 + e^{-x}}$, 
+		$x \mapsto \begin{cases} 
+			0 & x\leq 0 \\
+			1 & x>0
+   \end{cases}$ }
 
       \end{axis}
     \end{tikzpicture}
   \end{figure}
 \end{frame}
-
-\begin{frame}{Fonctions d'activation}
-  \begin{figure}
-    \begin{tikzpicture}
-      \begin{axis}[
-		no marks,
-        mlineplot,
-        width=0.9\textwidth,
-        height=6cm,
-		xmin=-5, xmax=5, ymin = 0, ymax=1,
-		title={Fonction \'echelon}
-      ]
-
-		\addplot[domain=-5:0,red] {0};
-		\addplot[domain=0:5,red] {0.8};
-		\draw[red] (axis cs:0,0) -- (axis cs:0,0.8);
-
-      \end{axis}
-    \end{tikzpicture}
-  \end{figure}
-\end{frame}
-
 
 \begin{frame}{Bar charts}
   \begin{figure}

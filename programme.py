@@ -103,48 +103,37 @@ input_nodes = 784
 hidden_nodes = 100
 output_nodes = 10
 
-learning_rate = 0.3
+learning_rate = 0.1
 
 #n = neuralNetwork(input_nodes, hidden_nodes, output_nodes, learning_rate)
 #n = neuralNetwork([input_nodes,hidden_nodes,output_nodes], learning_rate)
-resultats = []
-for j in range(2):
-	if(j==0):
-		ca = 0.01
-	else:
-		ca = 0.05
 
-	performance = 0
-	for i in range(100):
-		n = neuralNetwork([784,100,10],ca)
+n = neuralNetwork([784,100,10],learning_rate)
 
-		cheminFichierEntrainement = "mnist_dataset/mnist_train.csv"
-		cheminFichierTest = "mnist_dataset/mnist_test.csv"
+cheminFichierEntrainement = "mnist_dataset/mnist_train.csv"
+cheminFichierTest = "mnist_dataset/mnist_test.csv"
 
-		entrainerReseau(cheminFichierEntrainement, n)
+entrainerReseau(cheminFichierEntrainement, n)
 
-		#Une fois le réseau  entraîné, il faut le tester
-		nombreExemples = 0
-		nombreSucces = 0
+#Une fois le réseau  entraîné, il faut le tester
+nombreExemples = 0
+nombreSucces = 0
 
-		with open(cheminFichierTest) as f:
-			for ligne in f:
-				entree = construireEntree(ligne)
-				valeurCorrecte = int(ligne[0])
+with open(cheminFichierTest) as f:
+	for ligne in f:
+		entree = construireEntree(ligne)
+		valeurCorrecte = int(ligne[0])
 
-				sortie = n.calculeSortie(entree)
-				resultat = determinerIndiceMax(sortie)
+		sortie = n.calculeSortie(entree)
+		resultat = determinerIndiceMax(sortie)
 
-				#Vérifier la performance du réseau
-				if (resultat == valeurCorrecte):
-					nombreSucces += 1
-				nombreExemples += 1
+		#Vérifier la performance du réseau
+		if (resultat == valeurCorrecte):
+			nombreSucces += 1
+		nombreExemples += 1
 
-		#print("performance = ", nombreSucces/nombreExemples)
-		performance += nombreSucces/nombreExemples
-	resultats.append((ca,performance/100))
+print("performance = ", nombreSucces/nombreExemples)
 
-print(resultats)
 
 
 print("---P3:  %s seconds ---" % (time.time() - start_time))
