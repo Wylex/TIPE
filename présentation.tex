@@ -1,0 +1,362 @@
+\documentclass[10pt]{beamer}
+
+\usepackage{graphicx}
+\graphicspath{ {images/} }
+
+\usetheme[progressbar=frametitle]{metropolis}
+\usepackage{appendixnumberbeamer}
+
+\usepackage{booktabs}
+\usepackage[scale=2]{ccicons}
+
+\usepackage{pgfplots}
+\usepgfplotslibrary{dateplot}
+
+\usepackage{xspace}
+\newcommand{\themename}{\textbf{\textsc{metropolis}}\xspace}
+
+\title{R\'eseau de neurones artificiels}
+\subtitle{Reconnaissance de caract\`eres}
+% \date{\today}
+\date{}
+\author{\textsc{L\'opez Herranz Daniel}}
+
+\institute{Lyc\'ee Saint Louis}
+% \titlegraphic{\hfill\includegraphics[height=1.5cm]{logo.pdf}}
+
+\begin{document}
+
+\maketitle
+
+\begin{frame}{Sommaire}
+  \setbeamertemplate{section in toc}[sections numbered]
+  \tableofcontents[hideallsubsections]
+\end{frame}
+
+\section{Introduction}
+
+%IA, présentation rapide => réseau de neurones
+\begin{frame}[fragile]{R\'eseau de neurones artificiels}
+	\begin{itemize}
+		\item Algorithme puissant
+		\item Vaste domaine d'appliquabilit\'e
+	\end{itemize}
+\end{frame}
+
+%Fonctionnement réseau
+\begin{frame}[fragile]{Lorem impsum}
+  
+  Sections group slides of the same topic
+
+  \begin{verbatim}    \section{Elements}\end{verbatim}
+
+  for which \themename provides a nice progress indicator \ldots
+\end{frame}
+
+\section{Cerveau biologique}
+
+\begin{frame}{Neurone}
+	$ $\\$ $
+	\begin{figure}
+  \includegraphics[scale=0.6]{neuron2}
+	\centering
+	\end{figure}
+	Un \textbf{neurone} est constitu\'e:
+	%\begin{itemize}
+		%\item des dendrites
+		%\item du noyau
+		%\item de l'axone
+		%\item des zones synaptiques
+	%\end{itemize}
+
+  \begin{columns}[T,onlytextwidth]
+    \column{0.3\textwidth}
+      \begin{itemize}
+        \item des dendrites \item du noyau
+      \end{itemize}
+
+    \column{0.4\textwidth}
+      \begin{itemize}
+        \item de l'axone \item des zones synaptiques
+      \end{itemize}
+  \end{columns}
+	$ $\\
+	Il transmet un signal des dendrites aux zones synaptiques
+\end{frame}
+
+{
+    \metroset{titleformat frame=smallcaps}
+\begin{frame}{Fonctionnement}
+	\begin{figure}
+  \includegraphics[scale=0.3]{déclencher}
+	\centering
+	\end{figure}
+	Le potentiel d'action suit la \textbf{loi du tout ou rien}
+\end{frame}
+}
+
+
+\section{R\'eseau artificiel}
+
+\begin{frame}[fragile]{Structure}
+	\begin{figure}
+  \includegraphics[scale=0.4]{structure}
+	\centering
+	\end{figure}
+		
+
+  \begin{center}becomes\end{center}
+
+  The theme provides sensible defaults to \emph{emphasize} text,
+  \alert{accent} parts or show \textbf{bold} results.
+\end{frame}
+
+\begin{frame}{Forward Propagation}
+	\begin{figure}
+  \includegraphics[scale=0.4]{forwardP}
+	\centering
+	\end{figure}
+
+	\[X=WI\]
+\end{frame}
+
+\begin{frame}{Backpropagation}
+	\[X = W^T E\]
+\end{frame}
+
+\begin{frame}{Training}
+	\[\frac{\partial E}{\partial \omega_{jk}} = - (t_k - o_k) \times \sigma\left(\sum_j \omega_{jk} \times o_j\right)
+	\left[1-\sigma(\sum_j \omega_{jk} \times o_j)\right]\times o_j\]	
+\end{frame}
+
+\begin{frame}{Figures}
+  \begin{figure}
+    \newcounter{density}
+    \setcounter{density}{20}
+    \begin{tikzpicture}
+      \def\couleur{alerted text.fg}
+      \path[coordinate] (0,0)  coordinate(A)
+                  ++( 90:5cm) coordinate(B)
+                  ++(0:5cm) coordinate(C)
+                  ++(-90:5cm) coordinate(D);
+      \draw[fill=\couleur!\thedensity] (A) -- (B) -- (C) --(D) -- cycle;
+      \foreach \x in {1,...,40}{%
+          \pgfmathsetcounter{density}{\thedensity+20}
+          \setcounter{density}{\thedensity}
+          \path[coordinate] coordinate(X) at (A){};
+          \path[coordinate] (A) -- (B) coordinate[pos=.10](A)
+                              -- (C) coordinate[pos=.10](B)
+                              -- (D) coordinate[pos=.10](C)
+                              -- (X) coordinate[pos=.10](D);
+          \draw[fill=\couleur!\thedensity] (A)--(B)--(C)-- (D) -- cycle;
+      }
+    \end{tikzpicture}
+    \caption{Rotated square from
+    \href{http://www.texample.net/tikz/examples/rotated-polygons/}{texample.net}.}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Tables}
+  \begin{table}
+    \caption{Largest cities in the world (source: Wikipedia)}
+    \begin{tabular}{lr}
+      \toprule
+      City & Population\\
+      \midrule
+      Mexico City & 20,116,842\\
+      Shanghai & 19,210,000\\
+      Peking & 15,796,450\\
+      Istanbul & 14,160,467\\
+      \bottomrule
+    \end{tabular}
+  \end{table}
+\end{frame}
+\begin{frame}{Blocks}
+  Three different block environments are pre-defined and may be styled with an
+  optional background color.
+
+  \begin{columns}[T,onlytextwidth]
+    \column{0.5\textwidth}
+      \begin{block}{Default}
+        Block content.
+      \end{block}
+
+      \begin{alertblock}{Alert}
+        Block content.
+      \end{alertblock}
+
+      \begin{exampleblock}{Example}
+        Block content.
+      \end{exampleblock}
+
+    \column{0.5\textwidth}
+
+      \metroset{block=fill}
+
+      \begin{block}{Default}
+        Block content.
+      \end{block}
+
+      \begin{alertblock}{Alert}
+        Block content.
+      \end{alertblock}
+
+      \begin{exampleblock}{Example}
+        Block content.
+      \end{exampleblock}
+
+  \end{columns}
+\end{frame}
+\begin{frame}{Math}
+  \begin{equation*}
+    e = \lim_{n\to \infty} \left(1 + \frac{1}{n}\right)^n
+  \end{equation*}
+\end{frame}
+
+\begin{frame}{Line plots}
+  \begin{figure}
+    \begin{tikzpicture}
+      \begin{axis}[
+        mlineplot,
+        width=0.9\textwidth,
+        height=6cm,
+		xlabel={coefficient d'apprentissage},
+		ylabel={performance},
+		xmin=0, xmax=1, ymin = 0.85, ymax=1,
+		title = Influence du CA,
+      ]
+
+        %\addplot {sin(deg(x))};
+		\addplot plot coordinates {(0.01,0.9164) (0.05, 0.9438) (0.1, 0.9490) (0.2, 0.9486) (0.3, 0.9428) (0.4, 0.9330) (0.5, 0.9202) (0.6, 0.9045) (0.7, 0.8912) (0.8,0.8771) (0.9, 0.8565)};
+        %%\addplot+[samples=100] {sin(deg(2*x))};
+
+      \end{axis}
+    \end{tikzpicture}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Fonctions d'activation}
+  \begin{figure}
+    \begin{tikzpicture}
+      \begin{axis}[
+		no marks,
+        mlineplot,
+        width=0.9\textwidth,
+        height=6cm,
+		title={Fonction sigmo\"idale},
+      ]
+
+		\addplot+ {1/(1 + e^(-x))};
+		\addplot[domain=-5:0,red] {0};
+		\addplot[domain=0:5,red] {0.8};
+		\draw[red] (axis cs:0,0) -- (axis cs:0,0.8);
+
+      \end{axis}
+    \end{tikzpicture}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Fonctions d'activation}
+  \begin{figure}
+    \begin{tikzpicture}
+      \begin{axis}[
+		no marks,
+        mlineplot,
+        width=0.9\textwidth,
+        height=6cm,
+		xmin=-5, xmax=5, ymin = 0, ymax=1,
+		title={Fonction \'echelon}
+      ]
+
+		\addplot[domain=-5:0,red] {0};
+		\addplot[domain=0:5,red] {0.8};
+		\draw[red] (axis cs:0,0) -- (axis cs:0,0.8);
+
+      \end{axis}
+    \end{tikzpicture}
+  \end{figure}
+\end{frame}
+
+
+\begin{frame}{Bar charts}
+  \begin{figure}
+    \begin{tikzpicture}
+      \begin{axis}[
+        mbarplot,
+        xlabel={Foo},
+        ylabel={Bar},
+        width=0.9\textwidth,
+        height=6cm,
+      ]
+
+      \addplot plot coordinates {(1, 20) (2, 25) (3, 22.4) (4, 12.4)};
+      \addplot plot coordinates {(1, 18) (2, 24) (3, 23.5) (4, 13.2)};
+      \addplot plot coordinates {(1, 10) (2, 19) (3, 25) (4, 15.2)};
+
+      \legend{lorem, ipsum, dolor}
+
+      \end{axis}
+    \end{tikzpicture}
+  \end{figure}
+\end{frame}
+\begin{frame}{Quotes}
+  \begin{quote}
+    Veni, Vidi, Vici
+  \end{quote}
+\end{frame}
+
+{%
+\setbeamertemplate{frame footer}{My custom footer}
+\begin{frame}[fragile]{Frame footer}
+    \themename defines a custom beamer template to add a text to the footer. It can be set via
+    \begin{verbatim}\setbeamertemplate{frame footer}{My custom footer}\end{verbatim}
+\end{frame}
+}
+
+\begin{frame}{References}
+  Some references to showcase [allowframebreaks] \cite{knuth92,ConcreteMath,Simpson,Er01,greenwade93}
+\end{frame}
+
+\section{Conclusion}
+
+\begin{frame}{Summary}
+
+  Get the source of this theme and the demo presentation from
+
+  \begin{center}\url{github.com/matze/mtheme}\end{center}
+
+  The theme \emph{itself} is licensed under a
+  \href{http://creativecommons.org/licenses/by-sa/4.0/}{Creative Commons
+  Attribution-ShareAlike 4.0 International License}.
+
+  \begin{center}\ccbysa\end{center}
+
+\end{frame}
+
+{\setbeamercolor{palette primary}{fg=black, bg=yellow}
+\begin{frame}[standout]
+  Questions?
+\end{frame}
+}
+
+\appendix
+
+\begin{frame}[fragile]{Backup slides}
+  Sometimes, it is useful to add slides at the end of your presentation to
+  refer to during audience questions.
+
+  The best way to do this is to include the \verb|appendixnumberbeamer|
+  package in your preamble and call \verb|\appendix| before your backup slides.
+
+  \themename will automatically turn off slide numbering and progress bars for
+  slides in the appendix.
+\end{frame}
+
+\begin{frame}[allowframebreaks]{References}
+
+  \bibliography{demo}
+  \bibliographystyle{abbrv}
+
+\end{frame}
+
+\end{document}
