@@ -1,7 +1,7 @@
 \documentclass[10pt]{beamer}
 
 \usepackage{graphicx}
-\usepackage{amsmath}
+%\usepackage{amsmath}
 \graphicspath{ {images/} }
 
 \usetheme[progressbar=frametitle]{metropolis}
@@ -18,6 +18,15 @@
 
 \pgfplotsset{soldot/.style={color=brown,only marks,mark=*}} \pgfplotsset{holdot/.style={color=brown,fill=white,only marks,mark=*}}
 
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{verbatim}
+\usepackage{booktabs}
+\usepackage{mathrsfs}
+\usepackage{stmaryrd}
+
+
 \title{R\'eseau de neurones artificiels}
 \subtitle{Reconnaissance de caract\`eres}
 % \date{\today}
@@ -25,7 +34,7 @@
 \author{\textsc{L\'opez Herranz Daniel}}
 
 \institute{Lyc\'ee Saint-Louis}
-% \titlegraphic{\hfill\includegraphics[height=1.5cm]{logo.pdf}}
+%\titlegraphic{\hfill\includegraphics[height=1.5cm]{logo.pdf}}
 
 \begin{document}
 
@@ -44,16 +53,6 @@
 		\item Algorithme puissant
 		\item Vaste domaine d'appliquabilit\'e
 	\end{itemize}
-\end{frame}
-
-%Fonctionnement réseau
-\begin{frame}[fragile]{Lorem impsum}
-  
-  Sections group slides of the same topic
-
-  \begin{verbatim}    \section{Elements}\end{verbatim}
-
-  for which \themename provides a nice progress indicator \ldots
 \end{frame}
 
 \section{Cerveau biologique}
@@ -103,24 +102,62 @@
 
 \begin{frame}[fragile]{Structure}
 	\begin{figure}
-  \includegraphics[scale=0.4]{structure}
+  \includegraphics[scale=0.4]{structure2}
 	\centering
 	\end{figure}
-		
-
   \begin{center}becomes\end{center}
+\end{frame}
 
-  The theme provides sensible defaults to \emph{emphasize} text,
-  \alert{accent} parts or show \textbf{bold} results.
+\begin{frame}{Matrices des poids}
+	Transition entre couche la couche $i$ \`a $q$ neurones et couche $i+1$ \`a $p$ neurones:
+	\[W_{i,i+1} = \begin{pmatrix}
+		\omega_{11} & \omega_{21} & \cdots & \omega_{q1}\\
+		\vdots & \vdots & \ddots & \vdots\\
+		\omega_{1q} & \omega_{2q} & \cdots & \omega_{pq}\\
+	\end{pmatrix} \in \mathscr{M}_{p,q}(\mathbb{R})\]
+
+	Avec $\omega_{kl}$ le poids entre la neurone $k$ de la couche $i$ et $l$ de la couche $i+1$
 \end{frame}
 
 \begin{frame}{Forward Propagation}
 	\begin{figure}
-  \includegraphics[scale=0.4]{forwardP}
+  \includegraphics[scale=0.4]{forwardP2}
 	\centering
 	\end{figure}
 
-	\[X=WI\]
+	\[O_j=\varphi(W_{j-1,j}\times O_{j-1})\]
+\end{frame}
+
+\begin{frame}{Fonctions d'activation}
+  \begin{figure}
+    \begin{tikzpicture}
+      \begin{axis}[
+		no marks,
+        mlineplot,
+        width=0.9\textwidth,
+        height=5.5cm,
+		xlabel={x},
+		ylabel={f(x)},
+		title={Fonction sigmo\"ide et \'echelon},
+		legend style={at={(0.40,0.85)}}
+		]
+
+		\addplot+ {1/(1 + e^(-x))};
+		\addplot[domain=-5:0,brown] {0};
+		\addplot[domain=0:5,brown] {1};
+		\draw[dotted,brown] (axis cs:0,0) -- (axis cs:0,1);
+		\addplot[soldot] coordinates{(0,0)};
+		\addplot[holdot] coordinates{(0,1)};
+
+      \legend{$x \mapsto \frac{1}{1 + e^{-x}}$, 
+		$x \mapsto \begin{cases} 
+			0 & x\leq 0 \\
+			1 & x>0
+   \end{cases}$ }
+
+      \end{axis}
+    \end{tikzpicture}
+  \end{figure}
 \end{frame}
 
 \begin{frame}{Backpropagation}
@@ -128,35 +165,8 @@
 \end{frame}
 
 \begin{frame}{Training}
-	\[\frac{\partial E}{\partial \omega_{jk}} = - (t_k - o_k) \times \sigma\left(\sum_j \omega_{jk} \times o_j\right)
-	\left[1-\sigma(\sum_j \omega_{jk} \times o_j)\right]\times o_j\]	
-\end{frame}
-
-\begin{frame}{Figures}
-  \begin{figure}
-    \newcounter{density}
-    \setcounter{density}{20}
-    \begin{tikzpicture}
-      \def\couleur{alerted text.fg}
-      \path[coordinate] (0,0)  coordinate(A)
-                  ++( 90:5cm) coordinate(B)
-                  ++(0:5cm) coordinate(C)
-                  ++(-90:5cm) coordinate(D);
-      \draw[fill=\couleur!\thedensity] (A) -- (B) -- (C) --(D) -- cycle;
-      \foreach \x in {1,...,40}{%
-          \pgfmathsetcounter{density}{\thedensity+20}
-          \setcounter{density}{\thedensity}
-          \path[coordinate] coordinate(X) at (A){};
-          \path[coordinate] (A) -- (B) coordinate[pos=.10](A)
-                              -- (C) coordinate[pos=.10](B)
-                              -- (D) coordinate[pos=.10](C)
-                              -- (X) coordinate[pos=.10](D);
-          \draw[fill=\couleur!\thedensity] (A)--(B)--(C)-- (D) -- cycle;
-      }
-    \end{tikzpicture}
-    \caption{Rotated square from
-    \href{http://www.texample.net/tikz/examples/rotated-polygons/}{texample.net}.}
-  \end{figure}
+	\[\frac{\partial E}{\partial \omega_{jk}} = - (t_k - o_k) \times \varphi\left(\sum_j \omega_{jk} \times o_j\right)
+	\left[1-\varphi\Big(\sum_j \omega_{jk} \times o_j\Big)\right]\times o_j\]	
 \end{frame}
 
 \begin{frame}{Blocks}
@@ -195,43 +205,8 @@
 
   \end{columns}
 \end{frame}
-\begin{frame}{Math}
-  \begin{equation*}
-    e = \lim_{n\to \infty} \left(1 + \frac{1}{n}\right)^n
-  \end{equation*}
-\end{frame}
 
-\begin{frame}{Fonctions d'activation}
-  \begin{figure}
-    \begin{tikzpicture}
-      \begin{axis}[
-		no marks,
-        mlineplot,
-        width=0.9\textwidth,
-        height=5.5cm,
-		xlabel={x},
-		ylabel={f(x)},
-		title={Fonction sigmo\"ide et \'echelon},
-		legend style={at={(0.40,0.85)}}
-		]
-
-		\addplot+ {1/(1 + e^(-x))};
-		\addplot[domain=-5:0,brown] {0};
-		\addplot[domain=0:5,brown] {1};
-		\draw[dotted,brown] (axis cs:0,0) -- (axis cs:0,1);
-		\addplot[soldot] coordinates{(0,0)};
-		\addplot[holdot] coordinates{(0,1)};
-
-      \legend{$x \mapsto \frac{1}{1 + e^{-x}}$, 
-		$x \mapsto \begin{cases} 
-			0 & x\leq 0 \\
-			1 & x>0
-   \end{cases}$ }
-
-      \end{axis}
-    \end{tikzpicture}
-  \end{figure}
-\end{frame}
+\section{Analyse}
 
 \begin{frame}{R\'esultats}
   \begin{table}
@@ -286,7 +261,7 @@
       ]
 
         %\addplot {sin(deg(x))};
-		\addplot plot coordinates {(20,0.9075) (50,0.9367) (80,0.9461) (110,0.9501) (140, 0.9530) (170,0.9549) (200,0.9564) (230,0.9573) (260,0.9577) (290,0.9582) (320,0.9582)};
+		\addplot plot coordinates {(20,0.9075) (50,0.9367) (80,0.9461) (110,0.9501) (140, 0.9530) (170,0.9549) (200,0.9564) (230,0.9573) (260,0.9577) (290,0.9582) (320,0.9582) (350,0.9585) (380,0.9589)};
         %%\addplot+[samples=100] {sin(deg(2*x))};
 
       \end{axis}

@@ -51,7 +51,7 @@ class neuralNetwork:
 
 #THE MNIST DATABASE OF HANDWRITTEN DIGITS
 #J'ai utilisé la base de données "The MNIST Database" qui donne en un fichier csv, c'est à dire avec des valeurs séparées par des virgules, des exemples réels d'images de chiffres écrits à la main.
-#Chaque chiffre écrit à la main est transformé en une image de taille 28*28 pixels. Chaque image est codé dans le fichier par une ligne. Chaque ligne est alors composé d'une première valeur qui est un chiffre entre 0 et 9 et qui correspond au chiffre qui apparaît dans l'image et qu'on souhaite que le réseau soit capable de reconnaître. La ligne est constitué ensuite de 28*28 autres valeurs comprises entre 0 et 255 qui correspondent à la couleur des pixels de l'image (en noir et blanc) et qui permettraient de reconstruire l'image.
+#Chaque chiffre écrit à  la main est transformé en une image de taille 28*28 pixels. Chaque image est codé dans le fichier par une ligne. Chaque ligne est alors composé d'une première valeur qui est un chiffre entre 0 et 9 et qui correspond au chiffre qui apparaît dans l'image et qu'on souhaite que le réseau soit capable de reconnaître. La ligne est constitué ensuite de 28*28 autres valeurs comprises entre 0 et 255 qui correspondent à la couleur des pixels de l'image (en noir et blanc) et qui permettraient de reconstruire l'image.
 #http://www.pjreddie.com/media/files/mnist_test.csv  (fichier contenant 60000 exemples)
 #http://www.pjreddie.com/media/files/mnist_train.csv (fichier contenant 10000 exemples)
 
