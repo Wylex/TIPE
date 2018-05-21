@@ -16,7 +16,7 @@
 \usepackage{xspace}
 \newcommand{\themename}{\textbf{\textsc{metropolis}}\xspace}
 
-\pgfplotsset{soldot/.style={color=red,only marks,mark=*}} \pgfplotsset{holdot/.style={color=red,fill=white,only marks,mark=*}}
+\pgfplotsset{soldot/.style={color=brown,only marks,mark=*}} \pgfplotsset{holdot/.style={color=brown,fill=white,only marks,mark=*}}
 
 \title{R\'eseau de neurones artificiels}
 \subtitle{Reconnaissance de caract\`eres}
@@ -24,7 +24,7 @@
 \date{}
 \author{\textsc{L\'opez Herranz Daniel}}
 
-\institute{Lyc\'ee Saint Louis}
+\institute{Lyc\'ee Saint-Louis}
 % \titlegraphic{\hfill\includegraphics[height=1.5cm]{logo.pdf}}
 
 \begin{document}
@@ -159,21 +159,6 @@
   \end{figure}
 \end{frame}
 
-\begin{frame}{Tables}
-  \begin{table}
-    \caption{Largest cities in the world (source: Wikipedia)}
-    \begin{tabular}{lr}
-      \toprule
-      City & Population\\
-      \midrule
-      Mexico City & 20,116,842\\
-      Shanghai & 19,210,000\\
-      Peking & 15,796,450\\
-      Istanbul & 14,160,467\\
-      \bottomrule
-    \end{tabular}
-  \end{table}
-\end{frame}
 \begin{frame}{Blocks}
   Three different block environments are pre-defined and may be styled with an
   optional background color.
@@ -216,28 +201,6 @@
   \end{equation*}
 \end{frame}
 
-\begin{frame}{Line plots}
-  \begin{figure}
-    \begin{tikzpicture}
-      \begin{axis}[
-        mlineplot,
-        width=0.9\textwidth,
-        height=6cm,
-		xlabel={coefficient d'apprentissage},
-		ylabel={performance},
-		xmin=0, xmax=1, ymin = 0.85, ymax=1,
-		title = Influence du CA,
-      ]
-
-        %\addplot {sin(deg(x))};
-		\addplot plot coordinates {(0.01,0.9164) (0.05, 0.9438) (0.1, 0.9490) (0.2, 0.9486) (0.3, 0.9428) (0.4, 0.9330) (0.5, 0.9202) (0.6, 0.9045) (0.7, 0.8912) (0.8,0.8771) (0.9, 0.8565)};
-        %%\addplot+[samples=100] {sin(deg(2*x))};
-
-      \end{axis}
-    \end{tikzpicture}
-  \end{figure}
-\end{frame}
-
 \begin{frame}{Fonctions d'activation}
   \begin{figure}
     \begin{tikzpicture}
@@ -249,13 +212,13 @@
 		xlabel={x},
 		ylabel={f(x)},
 		title={Fonction sigmo\"ide et \'echelon},
-		legend style={at={(0.45,0.8)}}
+		legend style={at={(0.40,0.85)}}
 		]
 
 		\addplot+ {1/(1 + e^(-x))};
-		\addplot[domain=-5:0,red] {0};
-		\addplot[domain=0:5,red] {1};
-		\draw[dotted,red] (axis cs:0,0) -- (axis cs:0,1);
+		\addplot[domain=-5:0,brown] {0};
+		\addplot[domain=0:5,brown] {1};
+		\draw[dotted,brown] (axis cs:0,0) -- (axis cs:0,1);
 		\addplot[soldot] coordinates{(0,0)};
 		\addplot[holdot] coordinates{(0,1)};
 
@@ -264,6 +227,89 @@
 			0 & x\leq 0 \\
 			1 & x>0
    \end{cases}$ }
+
+      \end{axis}
+    \end{tikzpicture}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{R\'esultats}
+  \begin{table}
+    \caption{R\'esultats du r\'eseau de neurones artificiels}
+    \begin{tabular}{lr}
+      \toprule
+      Nombre exemples & $60000$\\
+	  Nombre tests & $10000$\\
+      %\midrule
+      CA & 0.3\\
+      Couches  & 3\\
+      Nombre neurones & 100\\
+      Performance & 0.94\\
+      \bottomrule
+    \end{tabular}
+  \end{table}
+\end{frame}
+
+\begin{frame}{Coefficient d'apprentissage}
+  \begin{figure}
+    \begin{tikzpicture}
+      \begin{axis}[
+        mlineplot,
+        width=0.9\textwidth,
+        height=6cm,
+		xlabel={coefficient d'apprentissage},
+		ylabel={performance},
+		xmin=0, xmax=1, ymin = 0.85, ymax=1,
+		title = {Influence du CA (100 neurones)},
+      ]
+
+        %\addplot {sin(deg(x))};
+		\addplot plot coordinates {(0.01,0.9164) (0.05, 0.9438) (0.1, 0.9490) (0.2, 0.9486) (0.3, 0.9428) (0.4, 0.9330) (0.5, 0.9202) (0.6, 0.9045) (0.7, 0.8912) (0.8,0.8771) (0.9, 0.8565)};
+        %%\addplot+[samples=100] {sin(deg(2*x))};
+
+      \end{axis}
+    \end{tikzpicture}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Nombre neurones}
+  \begin{figure}
+    \begin{tikzpicture}
+      \begin{axis}[
+        mlineplot,
+        width=0.9\textwidth,
+        height=6cm,
+		xlabel={Nombre neurones},
+		ylabel={performance},
+		xmin=0, xmax=400, ymin = 0.85, ymax=1,
+		title = {Influence du nombre de neurones (CA = 0.1)},
+      ]
+
+        %\addplot {sin(deg(x))};
+		\addplot plot coordinates {(20,0.9075) (50,0.9367) (80,0.9461) (110,0.9501) (140, 0.9530) (170,0.9549) (200,0.9564) (230,0.9573) (260,0.9577) (290,0.9582) (320,0.9582)};
+        %%\addplot+[samples=100] {sin(deg(2*x))};
+
+      \end{axis}
+    \end{tikzpicture}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Nombre it\'erations}
+  \begin{figure}
+    \begin{tikzpicture}
+      \begin{axis}[
+        mlineplot,
+        width=0.9\textwidth,
+        height=6cm,
+		xlabel={Nombre it\'erations},
+		ylabel={performance},
+		xmin=0, xmax=10, ymin = 0.85, ymax=1,
+		title = {Influence du nombre d'it\'erations}
+      ]
+
+        %\addplot {sin(deg(x))};
+		%\addplot plot coordinates {(20,0.9075) (50,0.9367) (80,0.9461) (110,0.9501)};
+        %%\addplot+[samples=100] {sin(deg(2*x))};
 
       \end{axis}
     \end{tikzpicture}

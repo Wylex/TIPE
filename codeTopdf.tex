@@ -2,6 +2,7 @@
 
 \usepackage{listings}             % Include the listings-package
 \usepackage{color}
+\usepackage{courier}
 
 %\usepackage[cyr]{aeguill}
 \usepackage[francais]{babel}
@@ -17,8 +18,10 @@
   belowskip=3mm,
   showstringspaces=false,
   columns=flexible,
-  %basicstyle={\small\ttfamily},
-  numbers=none,
+  basicstyle={\small\ttfamily},
+  numbers=left,
+  frame=leftline,
+  rulecolor=\color{gray},
   numberstyle=\tiny\color{gray},
   keywordstyle=\color{blue},
   commentstyle=\color{dkgreen},
