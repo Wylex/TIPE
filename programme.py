@@ -7,42 +7,44 @@ start_time = time.time()
 class neuralNetwork:
 
 	def __init__(self,nombreNeurones, coefficientApprentisage):
-		self.nombreNeurones = nombreNeurones[:] #tableau qui donne le nombre de neurones par couche
+		self.nombreNeuronesCouche = nombreNeurones[:] #nombre de neurones par couche
 		self.coefficientApprentisage = coefficientApprentisage
 		self.fonctionActivation = lambda x: scipy.special.expit(x) #fonction d'activation, ici fonction sigmoïde
 
 		#construction du tableau des matrices de poids
 		self.poids = []
-		for i in range(len(nombreNeurones)-1):
-			self.poids.append(np.random.rand(self.nombreNeurones[i+1], self.nombreNeurones[i]) - 0.5)
+		for i in range(len(self.nombreNeuronesCouche)-1):
+			self.poids.append(np.random.rand(self.nombreNeuronesCouche[i+1], self.nombreNeuronesCouche[i]) - 0.5)
 
 	def entrainer(self, entree, cible):
 		"""Fonction qui modifie les poids du réseau en fonction de l'erreur comis"""
+
 		cible_np = np.array(cible, ndmin=2).T
 		signal = np.array(entree, ndmin=2).T
 
 		#forwardpropagation
 		sortieCouches = [signal] #signaux de sortie pour chaque couche de neurones
-		for i in range(len(self.nombreNeurones) -1):
+		for i in range(len(self.nombreNeuronesCouche) -1):
 			signal = np.dot(self.poids[i], signal)
 			signal = self.fonctionActivation(signal)
 			sortieCouches.append(signal)
 
-		#backpropagation
+		#rétropropagation
 		erreurs = [cible_np - sortieCouches[-1]] #erreurs pour chaque couche de neurones
-		for i in range(len(self.nombreNeurones)-2, 0,-1):
+		for i in range(len(self.nombreNeuronesCouche)-2, 0,-1):
 			erreurs.append(np.dot(self.poids[i].T, erreurs[-1]))
 
 		#correction des poids en fonction des erreur de chaque neurone
-		for i in range(len(self.nombreNeurones) -1):
-			self.poids[i] += self.coefficientApprentisage*np.dot((sortieCouches[i+1]* erreurs[len(self.nombreNeurones)-2-i]*(1.0 - sortieCouches[i+1])), np.transpose(sortieCouches[i]))
+		for i in range(len(self.nombreNeuronesCouche) -1):
+			self.poids[i] += self.coefficientApprentisage*np.dot((sortieCouches[i+1]* erreurs[len(self.nombreNeuronesCouche)-2-i]*(1.0 - sortieCouches[i+1])), np.transpose(sortieCouches[i]))
 
 
 	def calculeSortie(self, entree):
 		"""Fonction qui calcule l'output"""
+
 		signal = np.array(entree, ndmin=2).T
 
-		for i in range(len(self.nombreNeurones) -1):
+		for i in range(len(self.nombreNeuronesCouche) -1):
 			signal = np.dot(self.poids[i], signal)
 			signal = self.fonctionActivation(signal)
 
@@ -50,17 +52,17 @@ class neuralNetwork:
 
 
 #THE MNIST DATABASE OF HANDWRITTEN DIGITS
-#J'ai utilisé la base de données "The MNIST Database" qui donne en un fichier csv, c'est à dire avec des valeurs séparées par des virgules, des exemples réels d'images de chiffres écrits à la main.
-#Chaque chiffre écrit à  la main est transformé en une image de taille 28*28 pixels. Chaque image est codé dans le fichier par une ligne. Chaque ligne est alors composé d'une première valeur qui est un chiffre entre 0 et 9 et qui correspond au chiffre qui apparaît dans l'image et qu'on souhaite que le réseau soit capable de reconnaître. La ligne est constitué ensuite de 28*28 autres valeurs comprises entre 0 et 255 qui correspondent à la couleur des pixels de l'image (en noir et blanc) et qui permettraient de reconstruire l'image.
+#J'ai utilisé la base de données "The MNIST Database" qui donne en un fichier csv (fichier constitué de valeurs séparées par des virgules) des exemples réels d'images de chiffres écrits à la main.
+#Les images ont une taille de 28*28 pixels. Chaque image est codée dans le fichier par une ligne. Chaque ligne est alors composée d'une première valeur qui correspond au chiffre qui apparaît dans l'image (compris entre 0 et 9). La ligne est ensuite constituée de 28*28 autres valeurs comprises entre 0 et 255 qui correspondent à la couleur des pixels de l'image (en noir et blanc) permettant de reconstruire l'image.
 #http://www.pjreddie.com/media/files/mnist_test.csv  (fichier contenant 60000 exemples)
 #http://www.pjreddie.com/media/files/mnist_train.csv (fichier contenant 10000 exemples)
 
 
 def construireEntree(ligne):
-	"""À partir d'une ligne d'un fichier .csv de la base de données MNIST construit un tableau numpy utilisable par le réseau de neurones"""
+	"""À partir d'une ligne d'un fichier .csv de la base de données MNIST, construit un tableau numpy utilisable par le réseau de neurones"""
 
-	#la ligne est initialement constitué de valeurs (de type string) séparées par des virgules
-	#il faut rentrer les valeurs dans un tableau
+	#la ligne est initialement constituée de valeurs (de type string) séparées par des virgules
+	#il faut rentrer ces valeurs dans un tableau
 	valeurs = ligne.split(',')
 
 	#ensuite on construit le tableau des entrées
@@ -71,17 +73,17 @@ def construireEntree(ligne):
 	return (entree/255.0)*0.99 + 0.01
 
 def construireCible(ligne):
-	"""à partir d'une ligne d'un fichier .csv construit la sortie théorique du réseau"""
+	"""À partir d'une ligne d'un fichier .csv construit la sortie cible"""
 
 	#la cible du réseau doit être constituée de 0 partout sauf pour le neurone correspondant au chiffre en question qui devrait valoir 1
-	#les valeurs 0 et 1 posent problème car la fonction d'activation ne les atteigne jamais donc on s'écarte légérement de ces deux extrêmes
-	cible = np.zeros(output_nodes) + 0.01
+	#les valeurs 0 et 1 posent problème car la fonction d'activation ne les atteigne jamais donc il faut s'écarter légérement de ces deux extrêmes
+	cible = np.zeros(10) + 0.01
 	cible[int(ligne[0])] = 0.99
 
 	return cible
 
 def entrainerReseau(fichierEntrainement, n):
-	"""entraîne le réseau «n» avec les exemples du fichier «fichierEntrainement»"""
+	"""Entraîne le réseau «n» avec les exemples du fichier «fichierEntrainement»"""
 
 	with open(fichierEntrainement) as f:
 		for ligne in f: #chaque ligne du fichier correspond à un chiffre donc à un exemple d'entraînement
@@ -92,7 +94,7 @@ def entrainerReseau(fichierEntrainement, n):
 			n.entrainer(entree,cible)
 
 def determinerIndiceMax(tableau):
-	"""renvoie l'indice de l'élément maximal d'un tableau"""
+	"""Renvoie l'indice de l'élément maximal d'un tableau"""
 
 	i = 0
 	for j in range(1,len(tableau)):
@@ -104,47 +106,38 @@ def determinerIndiceMax(tableau):
 
 
 
-input_nodes = 784
-hidden_nodes = 20
-output_nodes = 10
 
-learning_rate = 0.1
+coefficientApprentissage = 0.1
 
-tableau = []
-for nodes in range(320, 500, 30):
-	performance = 0
-	for i in range(50):
-		n = neuralNetwork([784,nodes,10],learning_rate)
+n = neuralNetwork([784,300,10], coefficientApprentissage)
 
-		cheminFichierEntrainement = "mnist_dataset/mnist_train.csv"
-		cheminFichierTest = "mnist_dataset/mnist_test.csv"
+cheminFichierEntrainement = "mnist_train.csv"
+cheminFichierTest = "mnist_test.csv"
 
-		entrainerReseau(cheminFichierEntrainement, n)
+#nombre d'itérations des exemples
+for j in range(7):
+	entrainerReseau(cheminFichierEntrainement, n)
 
-		#une fois le réseau  entraîné, il faut le tester
-		nombreExemples = 0
-		nombreSucces = 0
+#une fois le réseau  entraîné, il faut le tester
+nombreExemples = 0
+nombreSucces = 0
 
-		with open(cheminFichierTest) as f:
-			for ligne in f:
-				entree = construireEntree(ligne)
-				valeurCorrecte = int(ligne[0])
+with open(cheminFichierTest) as f:
+	for ligne in f:
+		entree = construireEntree(ligne)
+		valeurCorrecte = int(ligne[0])
 
-				sortie = n.calculeSortie(entree)
-				resultat = determinerIndiceMax(sortie)
+		sortie = n.calculeSortie(entree)
+		resultat = determinerIndiceMax(sortie)
 
-				#vérifier la performance du réseau
-				if (resultat == valeurCorrecte):
-					nombreSucces += 1
-				nombreExemples += 1
+		#vérifier la performance du réseau
+		if (resultat == valeurCorrecte):
+			nombreSucces += 1
+		nombreExemples += 1
 
-		#print("performance = ", nombreSucces/nombreExemples)
-		performance += nombreSucces/nombreExemples
+print("performance = ", nombreSucces/nombreExemples)
+		
 
-	print("nodes = ", nodes, " performance = ", performance/50.0)
-	tableau.append((nodes, performance/50.0))
-
-print(tableau)
 
 
 print("---:  %s seconds ---" % (time.time() - start_time))

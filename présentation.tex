@@ -35,6 +35,7 @@
 
 \institute{Lyc\'ee Saint-Louis}
 %\titlegraphic{\hfill\includegraphics[height=1.5cm]{logo.pdf}}
+\setbeamertemplate{frame footer}{\insertsection}
 
 \begin{document}
 
@@ -51,11 +52,13 @@
 \begin{frame}[fragile]{Pourquoi un r\'eseau de neurones artificiels?}
 	\begin{itemize}
 		\item Algorithme puissant
-		\item Vaste domaine d'appliquabilit\'e
+		\item Tr\`es utilis\'e
+		\item Permet cependant des impl\'ementations simples
+		\item Applications nombreuses
 	\end{itemize}
 \end{frame}
 
-\section{Cerveau biologique}
+\section{Mod\`ele biologique}
 
 \begin{frame}{Neurone}
 	$ $\\$ $
@@ -83,7 +86,7 @@
       \end{itemize}
   \end{columns}
 	$ $\\
-	Il transmet un signal des dendrites aux zones synaptiques
+	Le signal est transmis des dendrites aux zones synaptiques
 \end{frame}
 
 {
@@ -102,26 +105,27 @@
 
 \begin{frame}[fragile]{Structure}
 	\begin{figure}
-  \includegraphics[scale=0.4]{structure2}
+  \includegraphics[scale=0.4]{str2A}
 	\centering
 	\end{figure}
   \begin{center}becomes\end{center}
 \end{frame}
 
 \begin{frame}{Matrices des poids}
-	Transition entre couche la couche $i$ \`a $q$ neurones et couche $i+1$ \`a $p$ neurones:
+	\textbf{Matrice des poids} pour la transition entre la couche $j$ (ayant $q$ neurones) et la couche $j+1$ (ayant $p$ neurones):
+%Transition entre la couche la couche $i$ \`a $q$ neurones et couche $i+1$ \`a $p$ neurones:
 	\[W_{i,i+1} = \begin{pmatrix}
 		\omega_{11} & \omega_{21} & \cdots & \omega_{q1}\\
 		\vdots & \vdots & \ddots & \vdots\\
 		\omega_{1q} & \omega_{2q} & \cdots & \omega_{pq}\\
 	\end{pmatrix} \in \mathscr{M}_{p,q}(\mathbb{R})\]
 
-	Avec $\omega_{kl}$ le poids entre la neurone $k$ de la couche $i$ et $l$ de la couche $i+1$
+	Avec $\omega_{kl}$ le poids associ\'e \`a la conexion entre la neurone $k$ de la couche $i$ et $l$ de la couche $i+1$
 \end{frame}
 
 \begin{frame}{Forward Propagation}
 	\begin{figure}
-  \includegraphics[scale=0.4]{forwardP2}
+  \includegraphics[scale=0.4]{forwardP3}
 	\centering
 	\end{figure}
 
@@ -137,7 +141,10 @@
         width=0.9\textwidth,
         height=5.5cm,
 		xlabel={x},
-		ylabel={f(x)},
+		%xlabel style={at={(axis description cs:0.95,-0.1)}},
+		ylabel={$\varphi$(x)},
+		%ylabel style={at={(axis description cs:-0.06,0.9)},rotate=-90},
+		ylabel style={rotate=-90},
 		title={Fonction sigmo\"ide et \'echelon},
 		legend style={at={(0.40,0.85)}}
 		]
@@ -161,14 +168,25 @@
 \end{frame}
 
 \begin{frame}{Backpropagation}
-	\[X = W^T E\]
+	\textbf{Matrice des erreurs} $E_j \in \mathscr{M}_{n_j,1}(\mathbb{R})$ o\`u $n_j$ est le nombre de neurones dans la couche $j$.\\
+	Nous avons la formule de r\'ecurrence:
+	\[E_j = (W_{j,j+1})^T \times E_{j+1}\]
 \end{frame}
 
 \begin{frame}{Training}
-	\[\frac{\partial E}{\partial \omega_{jk}} = - (t_k - o_k) \times \varphi\left(\sum_j \omega_{jk} \times o_j\right)
-	\left[1-\varphi\Big(\sum_j \omega_{jk} \times o_j\Big)\right]\times o_j\]	
+	$\quad \quad$ On pose: $E_j = \begin{pmatrix}
+		e_1 \\
+		\vdots \\
+		e_n\\
+	\end{pmatrix}$  et $\alpha$ le coefficient d'apprentissage
+
+	\[\frac{\partial E_j}{\partial \omega_{kl}} = - e_l \times \varphi\left(\sum_k o_k \times \omega_{kl} \right)
+	\left[1-\varphi\Big(\sum_k o_k \times \omega_{kl} \Big)\right]\times o_k\]	
+
+	\[\text{Nouveau poids: } \omega_{kl}' = \omega_{kl} - \alpha \frac{\partial E_j}{\partial \omega_{kl}}\]
 \end{frame}
 
+\begin{comment}
 \begin{frame}{Blocks}
   Three different block environments are pre-defined and may be styled with an
   optional background color.
@@ -205,6 +223,7 @@
 
   \end{columns}
 \end{frame}
+\end{comment}
 
 \section{Analyse}
 
@@ -256,12 +275,13 @@
         height=6cm,
 		xlabel={Nombre neurones},
 		ylabel={performance},
-		xmin=0, xmax=400, ymin = 0.85, ymax=1,
+		xmin=0, xmax=800, ymin = 0.90, ymax=0.98,
 		title = {Influence du nombre de neurones (CA = 0.1)},
       ]
 
         %\addplot {sin(deg(x))};
-		\addplot plot coordinates {(20,0.9075) (50,0.9367) (80,0.9461) (110,0.9501) (140, 0.9530) (170,0.9549) (200,0.9564) (230,0.9573) (260,0.9577) (290,0.9582) (320,0.9582) (350,0.9585) (380,0.9589)};
+		\addplot plot coordinates {(20,0.9075) (50,0.9367) (80,0.9461) (110,0.9501) (140, 0.9530) (170,0.9549) (200,0.9564) (230,0.9573) (260,0.9577) (290,0.9582) (320,0.9582) (350,0.9585) (380,0.9589) (410,0.9592) (440, 0.9591)  (600,0.9605) (700,0.9605) (800,0.9605)};
+		%(470,0.9582)
         %%\addplot+[samples=100] {sin(deg(2*x))};
 
       \end{axis}
@@ -278,19 +298,18 @@
         height=6cm,
 		xlabel={Nombre it\'erations},
 		ylabel={performance},
-		xmin=0, xmax=10, ymin = 0.85, ymax=1,
-		title = {Influence du nombre d'it\'erations}
+		xmin=0, xmax=10.1, ymin = 0.945, ymax=0.97,
+		title = {Influence du nombre d'it\'erations (CA = 0.1, NN = 100)}
       ]
 
-        %\addplot {sin(deg(x))};
-		%\addplot plot coordinates {(20,0.9075) (50,0.9367) (80,0.9461) (110,0.9501)};
-        %%\addplot+[samples=100] {sin(deg(2*x))};
+		\addplot plot coordinates {(1,0.9495) (2,0.9599) (3,0.9630) (4,0.9648) (5,0.9652) (6,0.9653) (7,0.9660) (8,0.9657) (9,0.9655) (10,0.964)};
 
       \end{axis}
     \end{tikzpicture}
   \end{figure}
 \end{frame}
 
+\begin{comment}
 \begin{frame}{Bar charts}
   \begin{figure}
     \begin{tikzpicture}
@@ -329,31 +348,39 @@
 \begin{frame}{References}
   Some references to showcase [allowframebreaks] \cite{knuth92,ConcreteMath,Simpson,Er01,greenwade93}
 \end{frame}
+\end{comment}
 
 \section{Conclusion}
 
-\begin{frame}{Summary}
+\begin{frame}{Performance finale}
+	%Un peu de blabla, dire la performance obtenue en appliquant touts les trucs précedants (ca, nn, ni)	
 
-  Get the source of this theme and the demo presentation from
 
-  \begin{center}\url{github.com/matze/mtheme}\end{center}
 
-  The theme \emph{itself} is licensed under a
-  \href{http://creativecommons.org/licenses/by-sa/4.0/}{Creative Commons
-  Attribution-ShareAlike 4.0 International License}.
+  Finalement en applications toutes ces am\'eliorations: CA = 0.1, nombre neurones = 200, it\'erations = 7 \\
+	
+  On arrive \`a une perfermance proche de $98$\% ce qui est beacoup? Dire les performances de quelques trucs?
 
-  \begin{center}\ccbysa\end{center}
+  %\begin{center}\url{github.com/matze/mtheme}\end{center}
+
+  %The theme \emph{itself} is licensed under a
+  %\href{http://creativecommons.org/licenses/by-sa/4.0/}{Creative Commons
+  %Attribution-ShareAlike 4.0 International License}.
+
+  %\begin{center}\ccbysa\end{center}
 
 \end{frame}
-
-{\setbeamercolor{palette primary}{fg=black, bg=yellow}
-\begin{frame}[standout]
-  Questions?
-\end{frame}
-}
 
 \appendix
 
+{\setbeamercolor{palette primary}{fg=black, bg=yellow}
+\begin{frame}[standout]
+  %Questions?
+\end{frame}
+}
+
+
+\begin{comment}
 \begin{frame}[fragile]{Backup slides}
   Sometimes, it is useful to add slides at the end of your presentation to
   refer to during audience questions.
@@ -371,5 +398,6 @@
   \bibliographystyle{abbrv}
 
 \end{frame}
+\end{comment}
 
 \end{document}
