@@ -111,25 +111,13 @@
   \begin{center}becomes\end{center}
 \end{frame}
 
-\begin{frame}{Matrices des poids}
-	\textbf{Matrice des poids} pour la transition entre la couche $j$ (ayant $q$ neurones) et la couche $j+1$ (ayant $p$ neurones):
-%Transition entre la couche la couche $i$ \`a $q$ neurones et couche $i+1$ \`a $p$ neurones:
-	\[W_{i,i+1} = \begin{pmatrix}
-		\omega_{11} & \omega_{21} & \cdots & \omega_{q1}\\
-		\vdots & \vdots & \ddots & \vdots\\
-		\omega_{1q} & \omega_{2q} & \cdots & \omega_{pq}\\
-	\end{pmatrix} \in \mathscr{M}_{p,q}(\mathbb{R})\]
-
-	Avec $\omega_{kl}$ le poids associ\'e \`a la conexion entre la neurone $k$ de la couche $i$ et $l$ de la couche $i+1$
-\end{frame}
-
 \begin{frame}{Forward Propagation}
 	\begin{figure}
   \includegraphics[scale=0.4]{forwardP3}
 	\centering
 	\end{figure}
 
-	\[O_j=\varphi(W_{j-1,j}\times O_{j-1})\]
+	\[x_j' = \varphi \left(\sum_{k=1}^n \omega_{kj} x_k \right)\]
 \end{frame}
 
 \begin{frame}{Fonctions d'activation}
@@ -167,7 +155,42 @@
   \end{figure}
 \end{frame}
 
+\begin{frame}{Matrices des poids}
+	\textbf{Matrice des poids} pour la transition entre la couche $j$ (ayant $q$ neurones) et la couche $j+1$ (ayant $p$ neurones):
+%Transition entre la couche la couche $i$ \`a $q$ neurones et couche $i+1$ \`a $p$ neurones:
+	\[W_{i,i+1} = \begin{pmatrix}
+		\omega_{11} & \omega_{21} & \cdots & \omega_{q1}\\
+		\vdots & \vdots & \ddots & \vdots\\
+		\omega_{1q} & \omega_{2q} & \cdots & \omega_{pq}\\
+	\end{pmatrix} \in \mathscr{M}_{p,q}(\mathbb{R})\]
+
+	Avec $\omega_{kl}$ le poids associ\'e \`a la conexion entre la neurone $k$ de la couche $i$ et $l$ de la couche $i+1$\\
+\end{frame}
+
+\begin{frame}{G\'en\'eralisation}
+	Calcul matriciel des valeurs pour toute une couche:\\
+	Pour la couche $i$, on pose $O_i \in \mathscr{M}_{n_i,1}(\mathbb{R})$ telle que:
+	$O_i = \begin{pmatrix}
+		x_1 \\
+		\vdots \\
+		x_{n_i}\\
+	\end{pmatrix}$
+
+	Nous avons alors la formule:
+
+	\[O_j=\varphi(W_{j-1,j}\times O_{j-1})\]
+
+\end{frame}
+
 \begin{frame}{Backpropagation}
+	\begin{figure}
+  \includegraphics[scale=0.4]{retro}
+	\centering
+	\end{figure}
+	\[e_j' = \sum_{k=1}^n \omega_{jk} e_k\]
+\end{frame}
+
+\begin{frame}{G\'en\'eralisation}
 	\textbf{Matrice des erreurs} $E_j \in \mathscr{M}_{n_j,1}(\mathbb{R})$ o\`u $n_j$ est le nombre de neurones dans la couche $j$.\\
 	Nous avons la formule de r\'ecurrence:
 	\[E_j = (W_{j,j+1})^T \times E_{j+1}\]
